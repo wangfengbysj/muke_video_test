@@ -7,6 +7,6 @@ from app.client import urls as client_urls
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('dashboard', include(dashboard_urls)),
-    path('client_urls', include(client_urls))
+    path('dashboard/', include(dashboard_urls)),
+    path('client_urls/', include(client_urls))
 ]
