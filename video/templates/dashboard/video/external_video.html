@@ -1,6 +1,7 @@
 <%inherit file='../base.html'/>
 <%!
 from django.urls import reverse
+from app.model.video import VideoType,FromType,NationalityType
 %>
 <%def name='css()'>
 </%def>
@@ -12,30 +13,82 @@ from django.urls import reverse
     </div>
     <div class="row">
         <div class="col-sm-offset-1">
-            <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">创建</button>
+<!--            <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">创建</button>-->
+            <button class="btn btn-primary" name="createBtn" id="createBtn">创建</button>
         </div>
     </div>
 </div>
 
-<div class="modal fade" tabindex="-1" role="dialog" id="myModal" >
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title">标题</h4>
-      </div>
-      <div class="modal-body">
-        <p>One fine body&hellip;</p>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
-        <button type="button" class="btn btn-primary">提交</button>
-      </div>
-    </div><!-- /.modal-content -->
-  </div><!-- /.modal-dialog -->
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title">添加视频</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="videoForm" name="videoForm">
+                    <div class="form-group">
+                        <label for="name" class="col-sm-2 control-label">视频名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="视频名称">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="image" class="col-sm-2 control-label">海报</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="image" name="image" placeholder="海报">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="video_type" class="col-sm-2 control-label">视频类型</label>
+                        <div class="col-sm-3">
+                            <select class="form-control" id="video_type" name="video_type">
+                                % for video_type in VideoType:
+                                <option value="${video_type.value}">${video_type.label}</option>
+                                % endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="from_to" class="col-sm-2 control-label">视频来源 </label>
+                        <div class="col-sm-3">
+                            <select class="form-control" name="from_to" id="from_to">
+                                % for from_to in FromType:
+                                % if from_to != FromType('custom'):
+                                <option value="${from_to.value}">${from_to.label}</option>
+                                % endif
+                                % endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="nationality" class="col-sm-2 control-label">国籍</label>
+                        <div class="col-sm-3">
+                            <select class="form-control" name="nationality" id="nationality">
+                                % for nationality in NationalityType:
+                                <option value="${nationality.value}">${nationality.label}</option>
+                                % endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="info" class="col-sm-2 control-label">视频简介</label>
+                        <div class="col-sm-10">
+                            <textarea name="info" id="info" class="form-control" rows="5" placeholder="视频简介"></textarea>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" name="videoSubmitBtn" id="videoSubmitBtn">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
 </div><!-- /.modal -->
-
 </%def>
 <%def name='js()'>
-    <script type="application/javascript" src='/static/dashboard/css/video/external_video.js'/>
+<script type="application/javascript" src='/static/dashboard/js/video/external_video.js'></script>
 </%def>
