@@ -14,7 +14,13 @@ class ExternalVideo(View):
     @dashboard_auth
     def get(self, request):
         error = request.GET.get('error')
-        data = {'error':error}
+        success = request.GET.get('success')
+        if error:
+            data = {'error': error}
+        elif success:
+            data = {'success': success}
+        else:
+            data = {}
         return render_to_response(request, self.TEMPLATE, data=data)
 
     def post(self, request):
@@ -40,4 +46,4 @@ class ExternalVideo(View):
         except IntegrityError as e:
             return redirect('{}?error={}'.format(reverse('external_video'), '视频数据重复'))
 
-        return redirect(reverse('external_video'))
+        return redirect('{}?success={}'.format(reverse('external_video'), '操作成功'))

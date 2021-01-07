@@ -4,9 +4,7 @@ from django.urls import reverse
 from app.model.video import VideoType,FromType,NationalityType
 %>
 <%def name='css()'>
-<link rel="stylesheet" type="text/css" href="/static/dashboard/css/video/toastr.min.css">
 <link rel="stylesheet" type="text/css" href="/static/dashboard/css/video/base.css">
-<link rel="stylesheet" type="text/css" href="/static/dashboard/css/video/bootstrapValidator.min.css">
 </%def>
 <%def name='title()'>外链视频</%def>
 <%def name='content()'>
@@ -101,6 +99,4 @@ from app.model.video import VideoType,FromType,NationalityType
 </%def>
 <%def name='js()'>
 <script type="application/javascript" src='/static/dashboard/js/video/external_video.js'></script>
-<script type="application/javascript" src='/static/dashboard/js/video/toastr.min.js'></script>
-<script type="application/javascript" src='/static/dashboard/js/video/bootstrapValidator.min.js'></script>
 </%def>

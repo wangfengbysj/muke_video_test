@@ -8,8 +8,11 @@ $(document).ready(function () {
     }
 
     var error = $.getUrlParam('error');
+    var success = $.getUrlParam('success')
     if (error != null) {
-        toastr.warning(error, '错误消息')
+        toastr.error(error, '警告')
+    }else if (success != null) {
+        toastr.success(success, '消息')
     }
 
     $('#createBtn').click(function () {
