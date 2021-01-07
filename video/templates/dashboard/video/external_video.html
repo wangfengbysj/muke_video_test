@@ -4,6 +4,9 @@ from django.urls import reverse
 from app.model.video import VideoType,FromType,NationalityType
 %>
 <%def name='css()'>
+<link rel="stylesheet" type="text/css" href="/static/dashboard/css/video/toastr.min.css">
+<link rel="stylesheet" type="text/css" href="/static/dashboard/css/video/base.css">
+<link rel="stylesheet" type="text/css" href="/static/dashboard/css/video/bootstrapValidator.min.css">
 </%def>
 <%def name='title()'>外链视频</%def>
 <%def name='content()'>
@@ -19,6 +22,7 @@ from app.model.video import VideoType,FromType,NationalityType
     </div>
 </div>
 
+
 <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
@@ -28,11 +32,13 @@ from app.model.video import VideoType,FromType,NationalityType
                 <h4 class="modal-title">添加视频</h4>
             </div>
             <div class="modal-body">
-                <form class="form-horizontal" id="videoForm" name="videoForm">
-                    <div class="form-group">
+                <form class="form-horizontal" id="videoForm" name="videoForm" method="POST">
+                    ${csrf_token}
+                    <div class="form-group required">
                         <label for="name" class="col-sm-2 control-label">视频名称</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" id="name" name="name" placeholder="视频名称">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="视频名称"
+                                   required data-bv-notempty-message="视频名称不能为空">
                         </div>
                     </div>
                     <div class="form-group">
@@ -41,20 +47,22 @@ from app.model.video import VideoType,FromType,NationalityType
                             <input type="text" class="form-control" id="image" name="image" placeholder="海报">
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group required">
                         <label for="video_type" class="col-sm-2 control-label">视频类型</label>
                         <div class="col-sm-3">
-                            <select class="form-control" id="video_type" name="video_type">
+                            <select class="form-control" id="video_type" name="video_type"
+                                    data-bv-notempty data-bv-notempty-message="视频类型不能为空">
                                 % for video_type in VideoType:
                                 <option value="${video_type.value}">${video_type.label}</option>
                                 % endfor
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
-                        <label for="from_to" class="col-sm-2 control-label">视频来源 </label>
+                    <div class="form-group required">
+                        <label for="from_to" class="col-sm-2 control-label">视频来源</label>
                         <div class="col-sm-3">
-                            <select class="form-control" name="from_to" id="from_to">
+                            <select class="form-control" name="from_to" id="from_to"
+                                    data-bv-notempty data-bv-notempty-message="视频来源不能为空">
                                 % for from_to in FromType:
                                 % if from_to != FromType('custom'):
                                 <option value="${from_to.value}">${from_to.label}</option>
@@ -63,20 +71,22 @@ from app.model.video import VideoType,FromType,NationalityType
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group required">
                         <label for="nationality" class="col-sm-2 control-label">国籍</label>
                         <div class="col-sm-3">
-                            <select class="form-control" name="nationality" id="nationality">
+                            <select class="form-control" name="nationality" id="nationality"
+                                    data-bv-notempty data-bv-notempty-message="国籍不能为空">
                                 % for nationality in NationalityType:
                                 <option value="${nationality.value}">${nationality.label}</option>
                                 % endfor
                             </select>
                         </div>
                     </div>
-                    <div class="form-group">
+                    <div class="form-group required">
                         <label for="info" class="col-sm-2 control-label">视频简介</label>
                         <div class="col-sm-10">
-                            <textarea name="info" id="info" class="form-control" rows="5" placeholder="视频简介"></textarea>
+                            <textarea name="info" id="info" class="form-control" rows="5" placeholder="视频简介"
+                                      required data-bv-notempty-message="视频简介不能为空"></textarea>
                         </div>
                     </div>
                 </form>
@@ -91,4 +101,6 @@ from app.model.video import VideoType,FromType,NationalityType
 </%def>
 <%def name='js()'>
 <script type="application/javascript" src='/static/dashboard/js/video/external_video.js'></script>
+<script type="application/javascript" src='/static/dashboard/js/video/toastr.min.js'></script>
+<script type="application/javascript" src='/static/dashboard/js/video/bootstrapValidator.min.js'></script>
 </%def>
