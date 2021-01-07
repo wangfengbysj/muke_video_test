@@ -1,4 +1,5 @@
 # encoding:utf-8
+from django.db import IntegrityError
 from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import View
@@ -24,14 +25,19 @@ class ExternalVideo(View):
         nationality = request.POST.get('nationality')
         info = request.POST.get("info")
         if not all([name, image, video_type, from_to, nationality, info]):
-            return redirect('{}?error{}'.format(reverse('external_video'), '缺少必要字段 '))
+            return redirect('{}?error={}'.format(reverse('external_video'), '缺少必要字段 '))
         print(name, image, video_type, from_to, nationality, info)
-        Video.objects.create(
-            name=name,
-            image=image,
-            video_type=video_type,
-            from_to=from_to,
-            nationality=nationality,
-            info=info
-        )
+
+        try:
+            Video.objects.create(
+                name=name,
+                image=image,
+                video_type=video_type,
+                from_to=from_to,
+                nationality=nationality,
+                info=info
+            )
+        except IntegrityError as e:
+            return redirect('{}?error={}'.format(reverse('external_video'), '视频数据重复'))
+
         return redirect(reverse('external_video'))
