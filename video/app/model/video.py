@@ -1,4 +1,5 @@
 # encoding:utf-8
+import time
 from enum import Enum
 
 from django.db import models
@@ -56,6 +57,13 @@ class Video(models.Model):
 
     class Meta:
         unique_together = ['name', 'video_type', 'from_to', 'nationality']
+    @property
+    def createdtm(self):
+        return self.created_time.strftime('%Y-%m-%d %H:%M:%S')
+
+    @property
+    def updatedtm(self):
+        return self.updated_time.strftime('%Y-%m-%d %H:%M:%S')
 
     def __str__(self):
         return self.name

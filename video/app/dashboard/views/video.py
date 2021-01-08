@@ -4,10 +4,10 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import View
 from app.libs.base_render import render_to_response
-from app.model.video import Video
+from app.model.video import Video, FromType
 from app.utils.permission import dashboard_auth
 
-
+# 外链接页面
 class ExternalVideo(View):
     TEMPLATE = '/dashboard/video/external_video.html'
 
@@ -21,6 +21,9 @@ class ExternalVideo(View):
             data = {'success': success}
         else:
             data = {}
+
+        videos = Video.objects.exclude(from_to=FromType.custom.value)
+        data['videos']=videos
         return render_to_response(request, self.TEMPLATE, data=data)
 
     def post(self, request):
@@ -30,7 +33,7 @@ class ExternalVideo(View):
         from_to = request.POST.get('from_to')
         nationality = request.POST.get('nationality')
         info = request.POST.get("info")
-        if not all([name, image, video_type, from_to, nationality, info]):
+        if not all([name, video_type, from_to, nationality, info]):
             return redirect('{}?error={}'.format(reverse('external_video'), '缺少必要字段 '))
         print(name, image, video_type, from_to, nationality, info)
 

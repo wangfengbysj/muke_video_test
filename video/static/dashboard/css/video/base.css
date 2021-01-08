@@ -1,4 +1,20 @@
-.form-group.required .control-label:after{
-    content:' *';
-    color:red;
+/*表单必填项*/
+.form-group.required .control-label:after {
+    content: ' *';
+    color: red;
+}
+/*表格标题剧中*/
+.table thead > tr > th {
+    text-align: center;
+}
+/*视频海报*/
+.video-img {
+    width: 50px;
+}
+/*视频描述*/
+.video-info {
+    width: 100px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }

@@ -14,13 +14,60 @@ from app.model.video import VideoType,FromType,NationalityType
     </div>
     <div class="row">
         <div class="col-sm-offset-1">
-<!--            <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">创建</button>-->
+            <!--            <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">创建</button>-->
             <button class="btn btn-primary" name="createBtn" id="createBtn">创建</button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-1  col-sm-10">
+<!--            外链接表格-->
+            <table class="table table-hover">
+                <thead>
+                <th>名称</th>
+                <th>海报</th>
+                <th>视频类型</th>
+                <th>视频来源</th>
+                <th>国籍</th>
+                <th>描述</th>
+                <th>状态</th>
+                <th>创建时间</th>
+                <th>修改时间</th>
+                <th>操作</th>
+                </thead>
+                <tbody>
+                % for video in videos:
+                <tr>
+                    <td>${video.name}</td>
+                    % if video.image != '':
+                    <td><img class="video-img" src="${video.image}"/></td>
+                    % endif
+                     % if video.image == '':
+                    <td><span class="glyphicon glyphicon-film"></span></td>
+                    % endif
+                    <td>${VideoType(video.video_type).label}</td>
+                    <td>${FromType(video.from_to).label}</td>
+                    <td>${NationalityType(video.nationality).label}</td>
+                    <td><p class="video-info">${video.info}</p></td>
+                    <td>${video.status}</td>
+                    <td>${video.createdtm}</td>
+                    <td>${video.updatedtm}</td>
+                    <td>
+                        <a class="btn btn-default" aria-label="Left Align" href="#">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 编辑
+                        </a>
+                        <a class="btn btn-default" aria-label="Left Align" href="#">
+                            <span class="glyphicon glyphicon-list" aria-hidden="true"></span> 附属信息
+                        </a>
+                    </td>
+                </tr>
+                % endfor
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
 
-
+<!--添加外链接视频Dialog-->
 <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
