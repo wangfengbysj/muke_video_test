@@ -1,8 +1,4 @@
-/*表单必填项*/
-.form-group.required .control-label:after {
-    content: ' *';
-    color: red;
-}
+
 /*表格标题剧中*/
 .table thead > tr > th {
     text-align: center;

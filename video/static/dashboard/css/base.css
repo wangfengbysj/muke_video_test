@@ -62,3 +62,9 @@ html, body{
 h3 {
     margin: 5%;
 }
+
+/*表单必填项*/
+.form-group.required .control-label:after {
+    content: ' *';
+    color: red;
+}

@@ -89,8 +89,10 @@ class Logout(View):
 class UpdateAdminStatus(View):
     def get(self,request):
         status = request.GET.get('status', 'on')
+        user_id = request.GET.get('user_id')
         print('status=',status)
         _status = True if status == 'on' else False
-        request.user.is_superuser = _status
-        request.user.save()
+        user = User.objects.get(pk=user_id)
+        user.is_superuser=_status
+        user.save()
         return redirect(reverse('admin_manager'))

@@ -4,8 +4,9 @@ from django.shortcuts import redirect
 from django.urls import reverse
 from django.views import View
 from app.libs.base_render import render_to_response
-from app.model.video import Video, FromType
+from app.model.video import Video, FromType, VideoSub
 from app.utils.permission import dashboard_auth
+
 
 # 外链接页面
 class ExternalVideo(View):
@@ -23,7 +24,7 @@ class ExternalVideo(View):
             data = {}
 
         videos = Video.objects.exclude(from_to=FromType.custom.value)
-        data['videos']=videos
+        data['videos'] = videos
         return render_to_response(request, self.TEMPLATE, data=data)
 
     def post(self, request):
@@ -50,3 +51,22 @@ class ExternalVideo(View):
             return redirect('{}?error={}'.format(reverse('external_video'), '视频数据重复'))
 
         return redirect('{}?success={}'.format(reverse('external_video'), '操作成功'))
+
+# 外部视频->附加信息
+class VideoAddition(View):
+    TEMPLATE = '/dashboard/video/video_sub.html'
+
+    def get(self, request, video_id):
+        data = {}
+        data['video'] = Video.objects.get(pk=video_id)
+        return render_to_response(request, self.TEMPLATE, data=data)
+
+    def post(self, request, video_id):
+        url = request.POST.get('url')
+        if url == '':
+            return redirect(reverse('video_sub', kwargs={'video_id': video_id}))
+        else:
+            video = Video.objects.get(pk=video_id)
+            length = video.video_sub.count()
+            VideoSub.objects.create(video=video, url=url,number=length + 1)
+            return redirect(reverse('video_sub', kwargs={'video_id':video_id}))

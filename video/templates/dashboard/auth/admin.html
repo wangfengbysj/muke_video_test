@@ -26,9 +26,9 @@ import time
                     <td>${user.is_superuser}</td>
                     <td>${user.date_joined.strftime('%Y-%m-%d %H:%M:%S %p')}</td>
                     % if user.is_superuser:
-                    <td><a href="${reverse('admin_update_status')}?status=off">取消管理员</a></td>
+                    <td><a href="${reverse('admin_update_status')}?status=off&user_id=${user.id}">取消管理员</a></td>
                     % else:
-                    <td><a href="${reverse('admin_update_status')}?status=on">成为管理员</a></td>
+                    <td><a href="${reverse('admin_update_status')}?status=on&user_id=${user.id}">成为管理员</a></td>
                     % endif
                 </tr>
                 % endfor

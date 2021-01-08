@@ -72,7 +72,7 @@ class Video(models.Model):
 class VideoStar(models.Model):
     video = models.ForeignKey(
         Video,
-        related_name='vidio_star',
+        related_name='video_star',
         on_delete=models.SET_NULL,
         blank=True, null=True)
     name = models.CharField(max_length=100, null=False)
@@ -88,7 +88,7 @@ class VideoStar(models.Model):
 class VideoSub(models.Model):
     video = models.ForeignKey(
         Video,
-        related_name='vidio_sub',
+        related_name='video_sub',
         on_delete=models.SET_NULL,
         blank=True, null=True)
     url = models.CharField(max_length=500, null=False)
