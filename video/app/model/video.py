@@ -43,6 +43,19 @@ NationalityType.korea.label = '韩国'
 NationalityType.america.label = '美国 '
 NationalityType.other.label = '其他'
 
+# 演员类型
+class IdentityType(Enum):
+    director = 'director'
+    protagonist = 'protagonist'
+    minorroles = 'minorroles'
+
+IdentityType.director.label='导演'
+IdentityType.protagonist.label='主角'
+IdentityType.minorroles.label='配角'
+IdentityType.director.color='primary'
+IdentityType.protagonist.color='success'
+IdentityType.minorroles.color='info'
+
 # 视频对象
 class Video(models.Model):
     name = models.CharField(max_length=100, null=False)
