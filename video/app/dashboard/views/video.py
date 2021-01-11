@@ -63,12 +63,12 @@ class VideoAddition(View):
 
     def post(self, request, video_id):
         url = request.POST.get('url')
-        if url == '':
+        number = request.POST.get('number')
+        if url == '' or number == '':
             return redirect(reverse('video_sub', kwargs={'video_id': video_id}))
         else:
             video = Video.objects.get(pk=video_id)
-            length = video.video_sub.count()
-            VideoSub.objects.create(video=video, url=url,number=length + 1)
+            VideoSub.objects.create(video=video, url=url,number=number)
             return redirect(reverse('video_sub', kwargs={'video_id':video_id}))
 
 #w外部链接->添加角色

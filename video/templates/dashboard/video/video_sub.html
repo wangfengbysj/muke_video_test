@@ -4,6 +4,7 @@ from django.urls import reverse
 from app.model.video import VideoType,FromType,NationalityType,IdentityType
 %>
 <%def name='css()'>
+<link rel="stylesheet" type="text/css" href="/static/dashboard/css/video/video_sub.css">
 </%def>
 <%def name='content()'>
 <div class="container-fluid">
@@ -11,34 +12,63 @@ from app.model.video import VideoType,FromType,NationalityType,IdentityType
         <h3>${video.name}</h3>
     </div>
     <div class="row">
-        <div class="col-sm-offset-1 col-sm-5">
-            <div class="panel panel-info">
-                <div class="panel-heading">集数</div>
-                <ul class="list-group">
-                    %if video.video_sub.count() == 0:
-                        <li class="list-group-item">还没有添加剧集</li>
-                    %endif
-                    %if video.video_sub.count() > 0:
-                    % for video_sub in video.video_sub.all():
-                    <a class="list-group-item" href="${video_sub.url}">第${video_sub.number}集</a>
-                    % endfor
-                    %endif
-                </ul>
-            </div>
+        <div class="col-sm-offset-1  col-sm-10">
+            <button class="btn btn-default" name="videoAdditionBtn" id="videoAdditionBtn">
+                <span class="glyphicon glyphicon-th-list" aria-hidden="true"></span>
+                添加附加信息
+            </button>
+            <button class="btn btn-default" name="videoAdditionBtn" id="videoStarBtn">
+                <span class="glyphicon glyphicon-user" aria-hidden="true"></span>
+                添加演员
+            </button>
+
         </div>
-        <div class="col-sm-5">
+    </div>
+    <div class="row ">
+        <div class="col-sm-offset-1  col-sm-10">
+            <table class="table table-hover ">
+                <thead>
+                <th>集数</th>
+                <th>地址</th>
+                <th>操作</th>
+                </thead>
+                <tbody>
+                % for video_sub in video.video_sub.all():
+                <tr>
+                    <td class="text-nowrap">第${video_sub.number}集</td>
+                    <td>${video_sub.url}</td>
+                    <td class="text-nowrap">
+                        <a class="btn btn-primary" aria-label="Left Align" href="">
+                            <span class="glyphicon glyphicon-list" aria-hidden="true"></span> 查看
+                        </a>
+                        <a class="btn btn-warning" aria-label="Left Align" href="#">
+                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 编辑
+                        </a>
+                        <a class="btn btn-danger" aria-label="Left Align" href="">
+                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 删除
+                        </a>
+                    </td>
+                </tr>
+                % endfor
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-1 col-sm-5">
             <div class="panel panel-info">
                 <div class="panel-heading">演员</div>
                 <ul class="list-group">
                     %if video.video_star.count() == 0:
-                        <li class="list-group-item">还没有添加演员</li>
+                    <li class="list-group-item">还没有添加演员</li>
                     %endif
                     %if video.video_star.count() > 0:
                     % for video_star in video.video_star.all():
                     <li class="list-group-item">
                         <span class="label label-${IdentityType(video_star.identity).color}">${IdentityType(video_star.identity).label}</span>
                         ${video_star.name}
-                        <a class="btn btn-danger btn-xs pull-right" aria-label="Left Align" href="${reverse('video_star_delete',kwargs={'video_id':video.id, 'star_id':video_star.id})}">
+                        <a class="btn btn-danger btn-xs pull-right" aria-label="Left Align"
+                           href="${reverse('video_star_delete',kwargs={'video_id':video.id, 'star_id':video_star.id})}">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </a>
                     </li>
@@ -49,30 +79,8 @@ from app.model.video import VideoType,FromType,NationalityType,IdentityType
         </div>
     </div>
     <div class="row">
-        <div class="col-sm-offset-1 col-sm-5">
-            <div class="panel panel-primary">
-                <div class="panel-heading">附加信息</div>
-                <div class="panel-body">
-                    <form class="form-horizontal" method="post" id="videoSubForm" name="videoSubForm"
-                          action="${reverse('video_sub', kwargs={'video_id':video.id})}">
-                        ${csrf_token}
-                        <div class="form-group required">
-                            <label for="url" class="col-sm-3 control-label">添加地址 </label>
-                            <div class="col-sm-8">
-                                <input type="text" class="form-control" id="url" name="url" placeholder="视频地址">
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <div class="col-sm-offset-3 col-sm-8">
-                                <button type="button" class="btn btn-default pull-left" id="videoSubResetBtn" name="videoSubResetBtn">重置</button>
-                                <button type="submit" class="btn btn-primary pull-right">添加</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-        <div class="col-sm-5">
+
+        <div class="col-sm-offset-1  col-sm-5">
             <div class="panel panel-primary">
                 <div class="panel-heading">演员信息</div>
                 <div class="panel-body">
@@ -82,7 +90,8 @@ from app.model.video import VideoType,FromType,NationalityType,IdentityType
                         <div class="form-group required">
                             <label for="actorName" class="col-sm-3 control-label">演员 </label>
                             <div class="col-sm-8">
-                                <input type="text" class="form-control" id="actorName" name="actorName" placeholder="演员">
+                                <input type="text" class="form-control" id="actorName" name="actorName"
+                                       placeholder="演员">
                             </div>
                         </div>
                         <div class="form-group required">
@@ -97,7 +106,9 @@ from app.model.video import VideoType,FromType,NationalityType,IdentityType
                         </div>
                         <div class="form-group">
                             <div class="col-sm-offset-3 col-sm-8">
-                                <button type="button" class="btn btn-default pull-left" id="videoActorResetBtn" name="videoActorResetBtn">重置</button>
+                                <button type="button" class="btn btn-default pull-left" id="videoActorResetBtn"
+                                        name="videoActorResetBtn">重置
+                                </button>
                                 <button type="submit" class="btn btn-primary pull-right">添加</button>
                             </div>
                         </div>
@@ -107,6 +118,40 @@ from app.model.video import VideoType,FromType,NationalityType,IdentityType
         </div>
     </div>
 </div>
+
+<div class="modal fade" tabindex="-1" role="dialog" id="videoAddtionDialog">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="videoAddtionTitle">附加信息</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" method="post" id="videoSubForm" name="videoSubForm"
+                      action="${reverse('video_sub', kwargs={'video_id':video.id})}">
+                    ${csrf_token}
+                    <div class="form-group required">
+                        <label for="url" class="col-sm-3 control-label">添加地址 </label>
+                        <div class="col-sm-8">
+                            <input type="text" class="form-control" id="url" name="url" placeholder="视频地址">
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label for="number" class="col-sm-3 control-label">添加集数</label>
+                        <div class="col-sm-8">
+                            <input type="number" class="form-control" id="number" name="number" placeholder="添加集数">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="videoAddtionOkBtn">确定</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
 </%def>
 
 <%def name="js()">
