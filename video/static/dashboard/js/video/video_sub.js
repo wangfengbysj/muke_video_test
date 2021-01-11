@@ -1,5 +1,6 @@
 $(function () {
 
+    // 获取URL中的error和success参数
     $.getUrlParam = function (name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
         var r = window.location.search.substr(1).match(reg);
@@ -7,6 +8,7 @@ $(function () {
         return null;
     }
 
+    // 页面初始化显示错误或者成功消息
     var error = $.getUrlParam('error');
     var success = $.getUrlParam('success')
     if (error != null) {
@@ -15,16 +17,28 @@ $(function () {
         toastr.success(success, '消息')
     }
 
+    // 附加信息对话框关闭后reest表单
     $('#videoAddtionDialog').on('hide.bs.modal', function () {
         $('#videoSubForm').bootstrapValidator('resetForm', true)
     })
 
-    // 弹出视频附加信息对话框
+    // 演员对话框关闭后reset表单
+    $('#actorDialog').on('hide.bs.modal', function () {
+        $('#videoStarForm').bootstrapValidator('resetForm', true)
+        $('#identity').val('director')
+    })
+
+    // 弹出添加视频附加信息对话框
     $('#videoAdditionBtn').click(function () {
-        $('#videoAddtionTitle').text("添加附加信息")
+        $('#actorTitle').text("添加演员信息")
         $('#videoAddtionDialog').modal('show')
     })
 
+    // 弹出添加演员对话框
+    $('#videoStarBtn').click(function () {
+        $('#actorTitle').text("添加附加信息")
+        $('#actorDialog').modal('show')
+    })
 
     // 视频附加信息表单验证
     $('#videoSubForm').bootstrapValidator({
@@ -61,7 +75,7 @@ $(function () {
         $('#videoSubForm').submit()
     })
 
-
+    // 演员表单验证
     $('#videoStarForm').bootstrapValidator({
         fields: {
             actorName: {
@@ -85,10 +99,8 @@ $(function () {
         e.target.submit()
     })
 
-    $('#videoActorResetBtn').click(function () {
-        $('#videoStarForm').bootstrapValidator('resetForm', true);
-        $('#identity').val('director')
+    // 提交演员表单
+    $('#actorOkBtn').click(function () {
+        $('#videoStarForm').submit()
     })
-
-
 })
