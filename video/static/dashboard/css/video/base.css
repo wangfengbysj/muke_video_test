@@ -14,3 +14,7 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+#createBtn {
+    margin-bottom: 10px;
+}

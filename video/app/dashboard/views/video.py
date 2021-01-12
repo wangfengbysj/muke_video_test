@@ -64,14 +64,24 @@ class VideoAddition(View):
     def post(self, request, video_id):
         url = request.POST.get('url')
         number = request.POST.get('number')
+        video_sub_id = request.POST.get('videosub_id')
+
         if url == '' or number == '':
             return redirect(reverse('video_sub', kwargs={'video_id': video_id}))
-        else:
+
+        if not video_sub_id:
             video = Video.objects.get(pk=video_id)
             VideoSub.objects.create(video=video, url=url,number=number)
-            return redirect(reverse('video_sub', kwargs={'video_id':video_id}))
+            return redirect('{}?success={}'.format(reverse('video_sub', kwargs={'video_id': video_id}), '添加演员成功'))
+        else:
+            video_sub = VideoSub.objects.get(pk=video_sub_id)
+            video_sub.url = url
+            video_sub.number=number
+            video_sub.save()
+            return redirect('{}?success={}'.format(reverse('video_sub', kwargs={'video_id': video_id}), '编辑演员成功'))
 
-#w外部链接->添加角色
+
+#外部链接->添加角色
 class VideoStarView(View):
 
     def post(self,request,video_id):
@@ -93,6 +103,7 @@ class VideoStarView(View):
 
         return redirect('{}?success={}'.format(reverse('video_sub', kwargs={'video_id': video_id}), '演员添加成功'))
 
+# 外部链接->角色删除
 class VideoStarDelete(View):
 
     def get(self, request, star_id,video_id):
@@ -100,3 +111,9 @@ class VideoStarDelete(View):
         if star:
             star.delete()
         return redirect('{}?success={}'.format(reverse('video_sub', kwargs={'video_id': video_id}), '演员删除成功'))
+
+# 外部链接->删除附加信息
+class VideoSubDelete(View):
+    def get(self,request,video_id,videosub_id):
+        VideoSub.objects.get(pk=videosub_id).delete()
+        return redirect('{}?success={}'.format(reverse('video_sub', kwargs={'video_id': video_id}), '删除附加信息成功'))

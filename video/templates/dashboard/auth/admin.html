@@ -12,50 +12,53 @@ import time
     </div>
     <div class="row">
         <div class="col-sm-offset-1 col-sm-10">
-            <table class="table table-hover">
-                <thead>
-                <th>用户名</th>
-                <th>状态</th>
-                <th>创建时间</th>
-                <th>编辑</th>
-                </thead>
-                <tbody>
-                % for user in users:
-                <tr>
-                    <td>${user.username}</td>
-                    <td>${user.is_superuser}</td>
-                    <td>${user.date_joined.strftime('%Y-%m-%d %H:%M:%S %p')}</td>
-                    % if user.is_superuser:
-                    <td><a href="${reverse('admin_update_status')}?status=off&user_id=${user.id}">取消管理员</a></td>
-                    % else:
-                    <td><a href="${reverse('admin_update_status')}?status=on&user_id=${user.id}">成为管理员</a></td>
-                    % endif
-                </tr>
-                % endfor
-                </tbody>
-            </table>
+            <div class="panel panel-primary">
+                <div class="panel-heading">管理员表</div>
+                <table class="table table-hover">
+                    <thead>
+                    <th>用户名</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>编辑</th>
+                    </thead>
+                    <tbody>
+                    % for user in users:
+                    <tr>
+                        <td>${user.username}</td>
+                        <td>${user.is_superuser}</td>
+                        <td>${user.date_joined.strftime('%Y-%m-%d %H:%M:%S %p')}</td>
+                        % if user.is_superuser:
+                        <td><a href="${reverse('admin_update_status')}?status=off&user_id=${user.id}">取消管理员</a></td>
+                        % else:
+                        <td><a href="${reverse('admin_update_status')}?status=on&user_id=${user.id}">成为管理员</a></td>
+                        % endif
+                    </tr>
+                    % endfor
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <div class="row">
         <div class="col-sm-offset-1 col-sm-10">
             <nav aria-label="Page navigation">
-                <ul class="pagination">
+                <ul class="pagination pagination-sm">
                     <li>
                         <%
-                          pre_link = '{}?page={}'.format(reverse('admin_manager'), previous_page)
-                          next_link = '{}?page={}'.format(reverse('admin_manager'), next_page)
+                        pre_link = '{}?page={}'.format(reverse('admin_manager'), previous_page)
+                        next_link = '{}?page={}'.format(reverse('admin_manager'), next_page)
                         %>
                         <a href="${pre_link}" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
                     % for num in page_num:
-                        % if num == curr_page:
-                        <li class="active"><a href="${reverse('admin_manager')}?page=${num}">${num}</a></li>
-                        % endif
-                        % if num != curr_page:
-                        <li><a href="${reverse('admin_manager')}?page=${num}">${num}</a></li>
-                        % endif
+                    % if num == curr_page:
+                    <li class="active"><a href="${reverse('admin_manager')}?page=${num}">${num}</a></li>
+                    % endif
+                    % if num != curr_page:
+                    <li><a href="${reverse('admin_manager')}?page=${num}">${num}</a></li>
+                    % endif
                     % endfor
                     <li>
                         <a href="${next_link}" aria-label="Next">
@@ -66,6 +69,8 @@ import time
             </nav>
         </div>
     </div>
+</div>
+
 </div>
 
 </%def>

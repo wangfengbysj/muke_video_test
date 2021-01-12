@@ -4,3 +4,14 @@
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+
+.video-btn {
+    width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+#videoStarBtn, #videoAdditionBtn {
+    margin-bottom: 10px;
+}

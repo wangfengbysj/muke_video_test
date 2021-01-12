@@ -27,33 +27,47 @@ from app.model.video import VideoType,FromType,NationalityType,IdentityType
     </div>
     <div class="row ">
         <!--        视频附加信息table-->
-        <div class="col-sm-offset-1  col-sm-10">
-            <table class="table table-hover ">
-                <thead>
-                <th>集数</th>
-                <th>地址</th>
-                <th>操作</th>
-                </thead>
-                <tbody>
-                % for video_sub in video.video_sub.all():
-                <tr>
-                    <td class="text-nowrap">第${video_sub.number}集</td>
-                    <td>${video_sub.url}</td>
-                    <td class="text-nowrap">
-                        <a class="btn btn-primary" aria-label="Left Align" href="">
-                            <span class="glyphicon glyphicon-list" aria-hidden="true"></span> 查看
-                        </a>
-                        <a class="btn btn-warning" aria-label="Left Align" href="#">
-                            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 编辑
-                        </a>
-                        <a class="btn btn-danger" aria-label="Left Align" href="">
-                            <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 删除
-                        </a>
-                    </td>
-                </tr>
-                % endfor
-                </tbody>
-            </table>
+        <div class="col-sm-offset-1 col-sm-10">
+            <div class="panel panel-primary">
+                <div class="panel-heading">附加信息表</div>
+                <table class="table table-hover">
+                    <thead>
+                    <th>集数</th>
+                    <th>地址</th>
+                    <th class="text-center">操作</th>
+                    </thead>
+                    <tbody>
+                    % if video.video_sub.count() > 0:
+                    % for video_sub in video.video_sub.all():
+                    <tr>
+                        <td class="text-nowrap">第${video_sub.number}集</td>
+                        <td><p>${video_sub.url}</p></td>
+                        <td class="video-btn">
+                            <a class="btn btn-primary" aria-label="Left Align" href="${video_sub.url}">
+                                <span class="glyphicon glyphicon-list" aria-hidden="true"></span> 查看
+                            </a>
+                            <a class="btn btn-warning videosubEditBtn" aria-label="Left Align" href="#"
+                               data-url="${video_sub.url}" data-number="${video_sub.number}" data-id="${video_sub.id}">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 编辑
+                            </a>
+                            <a class="btn btn-danger videosubDeleteBtn" aria-label="Left Align"
+                               href="${reverse('video_sub_del',kwargs={'video_id':video.id, 'videosub_id':video_sub.id})}">
+                                <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 删除
+                            </a>
+                        </td>
+                    </tr>
+                    % endfor
+                    %endif
+                    % if video.video_sub.count() == 0:
+                    <tr>
+                        <td colspan="3">
+                            暂无数据
+                        </td>
+                    </tr>
+                    %endif
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
     <div class="row">
@@ -148,6 +162,7 @@ from app.model.video import VideoType,FromType,NationalityType,IdentityType
                             <input type="number" class="form-control" id="number" name="number" placeholder="添加集数">
                         </div>
                     </div>
+                    <input type="hidden" name="videosub_id" id="videosub_id" value=""/>
                 </form>
             </div>
             <div class="modal-footer">

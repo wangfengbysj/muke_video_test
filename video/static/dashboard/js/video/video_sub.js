@@ -30,13 +30,13 @@ $(function () {
 
     // 弹出添加视频附加信息对话框
     $('#videoAdditionBtn').click(function () {
-        $('#actorTitle').text("添加演员信息")
+        $('#videoAddtionTitle').text("添加附加信息")
         $('#videoAddtionDialog').modal('show')
     })
 
     // 弹出添加演员对话框
     $('#videoStarBtn').click(function () {
-        $('#actorTitle').text("添加附加信息")
+        $('#actorTitle').text("添加演员信息")
         $('#actorDialog').modal('show')
     })
 
@@ -102,5 +102,17 @@ $(function () {
     // 提交演员表单
     $('#actorOkBtn').click(function () {
         $('#videoStarForm').submit()
+    })
+
+    $('.videosubEditBtn').click(function () {
+        var url = $(this).attr('data-url')
+        var number = $(this).attr('data-number')
+        var id = $(this).attr('data-id')
+        var video_id = $('#video_id').val()
+        $('#url').val(url)
+        $('#number').val(number)
+        $('#videosub_id').val(id)
+        $('#videoAddtionTitle').text("编辑附加信息")
+        $('#videoAddtionDialog').modal('show')
     })
 })
