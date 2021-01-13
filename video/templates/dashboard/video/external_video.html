@@ -54,7 +54,7 @@ from app.model.video import VideoType,FromType,NationalityType
                         <td>${video.createdtm}</td>
                         <td>${video.updatedtm}</td>
                         <td>
-                            <a class="btn btn-default" aria-label="Left Align" href="#">
+                            <a class="btn btn-default videoBtn" aria-label="Left Align" href="#" data-id="${video.id}">
                                 <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 编辑
                             </a>
                             <a class="btn btn-default" aria-label="Left Align"
@@ -71,14 +71,14 @@ from app.model.video import VideoType,FromType,NationalityType
     </div>
 </div>
 
-<!--添加外链接视频Dialog-->
+<!--添加/编辑外链接视频Dialog-->
 <div class="modal fade" tabindex="-1" role="dialog" id="myModal">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
                 </button>
-                <h4 class="modal-title">添加视频</h4>
+                <h4 class="modal-title" id="videoTitle">添加视频</h4>
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" id="videoForm" name="videoForm" method="POST">
@@ -138,6 +138,7 @@ from app.model.video import VideoType,FromType,NationalityType
                                       required data-bv-notempty-message="视频简介不能为空"></textarea>
                         </div>
                     </div>
+                    <input type="hidden" name="video_id" id="video_id" value="">
                 </form>
             </div>
             <div class="modal-footer">

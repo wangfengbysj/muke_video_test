@@ -81,6 +81,7 @@ class Video(models.Model):
     def __str__(self):
         return self.name
 
+
 # 视频演员
 class VideoStar(models.Model):
     video = models.ForeignKey(
