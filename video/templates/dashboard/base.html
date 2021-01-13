@@ -13,12 +13,19 @@
 <%! from django.urls import reverse %>
 <%include file="nav.html"/>
 <div id="base_area">
-    <ul class="side-menu">
-        <li><a href="${reverse('admin_manager')}">管理员</a></li>
-        <li>用户</li>
-        <li><a href="${reverse('external_video')}">外链视频</a></li>
-        <li>自制视频</li>
-    </ul>
+    <div class="side-menu">
+        <div class="list-group">
+            <a class="list-group-item text-center" href="${reverse('admin_manager')}" id="adminMenu">管理员</a>
+            <a class="list-group-item text-center" id="userMenu">用户</a>
+            <a class="list-group-item text-center" href="${reverse('external_video')}" id="videoMenu">外链视频</a>
+            <a class="list-group-item text-center" id="selfVideoMenu">自制视频</a>
+        </div>
+<!--        <li><a href="${reverse('admin_manager')}">管理员</a></li>-->
+<!--        <li>用户</li>-->
+<!--        <li><a href="${reverse('external_video')}">外链视频</a></li>-->
+<!--        <li>自制视频</li>-->
+    </div>
+
     <div class="base-content">
         ${self.content()}
     </div>

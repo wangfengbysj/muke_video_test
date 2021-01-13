@@ -46,43 +46,57 @@ html, body {
     padding-left: 0;
 }
 
-.side-menu > li {
-    width: 100%;
-    line-height: 42px;
-    text-align: center;
-    border-bottom: 1px solid #cccccc;
-    cursor: pointer;
+.list-group-item:first-child {
+    border-top:0px;
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px
+}
+
+.list-group-item:last-child {
+    border-bottom-right-radius: 0px;
+    border-bottom-left-radius: 0px;
+}
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    border-right: 0px;
 }
 
 .base-content {
-    height: 100%;
-    width: 88%;
-    position: absolute;
-    top: 0;
-    right: 0;
-    border-left: 1px solid #cccccc;
+height: 100%;
+width: 88%;
+position: absolute;
+top: 0;
+right: 0;
+border-left: 1px solid #cccccc;
 }
 
 .page-title {
-    padding-left: 22px;
-    margin-left: 40px;
-    margin-top: 40px;
-    margin-bottom: 20px;
-    font-size: 24px;
-    color: #333333;
-    border-radius: 6px;
-    position: relative;
-    overflow: hidden;
+padding-left: 22px;
+margin-left: 40px;
+margin-top: 40px;
+margin-bottom: 20px;
+font-size: 24px;
+color: #333333;
+border-radius: 6px;
+position: relative;
+overflow: hidden;
 }
 
 .page-title:after {
-    position: absolute;
-    content: '';
-    top: 0px;
-    left: 0px;
-    bottom: 0px;
-    width: 8px;
-    background: #337AB7;
+position: absolute;
+content: '';
+top: 0px;
+left: 0px;
+bottom: 0px;
+width: 8px;
+background: #337AB7;
 }
 
 /*表单必填项*/
