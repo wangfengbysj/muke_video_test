@@ -5,7 +5,7 @@ from django.urls import path
 from .views.index import Index
 from .views.auth import Login, AdminManager, Logout, UpdateAdminStatus
 from .views.video import ExternalVideo, VideoAddition, VideoStarView, VideoStarDelete, VideoSubDelete, VideoUpdate, \
-    CustomVideo
+    CustomVideo, CustomVideoAddtion
 
 urlpatterns = [
     # 首页
@@ -31,5 +31,7 @@ urlpatterns = [
     path('video/videostar/<int:video_id>/<int:star_id>', VideoStarDelete.as_view(), name='video_star_delete'),
 
     #自制视频
-    path('video/custom', CustomVideo.as_view(), name='custom_video')
+    path('video/custom', CustomVideo.as_view(), name='custom_video'),
+    #自制视频附加信息
+    path('video/cust_video_sub/<int:video_id>', CustomVideoAddtion.as_view(),name='custom_video_sub')
 ]

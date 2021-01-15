@@ -2,6 +2,22 @@ $(document).ready(function () {
     $('.list-group-item').removeClass('active')
     $('#selfVideoMenu').addClass('active')
 
+     // 获取页面请求查询参数
+    $.getUrlParam = function (name) {
+        var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");
+        var r = window.location.search.substr(1).match(reg);
+        if (r != null) return decodeURI(r[2]);
+        return null;
+    }
+
+    var error = $.getUrlParam('error');
+    var success = $.getUrlParam('success')
+    if (error != null) {
+        toastr.error(error, '警告')
+    } else if (success != null) {
+        toastr.success(success, '消息')
+    }
+
     // 弹出视频表单对话框
     $('#createBtn').click(function () {
         $('#videoTitle').text('添加自制视频信息')

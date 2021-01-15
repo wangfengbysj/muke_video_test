@@ -1,5 +1,8 @@
 $(function () {
 
+    $('.list-group-item').removeClass('active')
+    $('#videoMenu').addClass('active')
+
     // 获取URL中的error和success参数
     $.getUrlParam = function (name) {
         var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)");

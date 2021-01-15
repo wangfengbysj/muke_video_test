@@ -127,6 +127,34 @@ class ExternalVideo(View):
         return redirect('{}?success={}'.format(reverse('external_video'), '操作成功'))
 
 
+#自制视频->附加信息
+class CustomVideoAddtion(View):
+    TEMPLATE='/dashboard/video/custom_video_sub.html'
+    def get(self, request, video_id):
+        data = {}
+        data['video'] = Video.objects.get(pk=video_id)
+        return render_to_response(request, self.TEMPLATE, data=data)
+
+    def post(self, request, video_id):
+        url = request.POST.get('url')
+        number = request.POST.get('number')
+        video_sub_id = request.POST.get('videosub_id')
+
+        if url == '' or number == '':
+            return redirect(reverse('cust_video_sub', kwargs={'video_id': video_id}))
+
+        if not video_sub_id:
+            video = Video.objects.get(pk=video_id)
+            VideoSub.objects.create(video=video, url=url, number=number)
+            return redirect('{}?success={}'.format(reverse('cust_video_sub', kwargs={'video_id': video_id}), '添加演员成功'))
+        else:
+            video_sub = VideoSub.objects.get(pk=video_sub_id)
+            video_sub.url = url
+            video_sub.number = number
+            video_sub.save()
+            return redirect('{}?success={}'.format(reverse('cust_video_sub', kwargs={'video_id': video_id}), '编辑演员成功'))
+
+
 # 外部视频->附加信息
 class VideoAddition(View):
     TEMPLATE = '/dashboard/video/video_sub.html'
