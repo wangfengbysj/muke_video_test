@@ -1,0 +1,167 @@
+<%inherit file='../base.html'/>
+<%!
+from django.urls import reverse
+from app.model.video import VideoType,FromType,NationalityType
+%>
+<%def name='css()'>
+<link rel="stylesheet" type="text/css" href="/static/dashboard/css/video/base.css">
+</%def>
+<%def name='title()'>自制视频</%def>
+<%def name='content()'>
+<div class="container-fluid">
+    <div class="row">
+        <div class="page-title">自制视频</div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-1 col-sm-10">
+            <!--            <button class="btn btn-primary" data-toggle="modal" data-target="#myModal">创建</button>-->
+            <button class="btn btn-primary" name="createBtn" id="createBtn">
+                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+                创建
+            </button>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-offset-1 col-sm-10">
+            <!--            外链接表格-->
+            <div class="panel panel-primary">
+                <div class="panel-heading">附加信息表</div>
+                <table class="table table-hover">
+                    <thead>
+                    <th>名称</th>
+                    <th>海报</th>
+                    <th>视频类型</th>
+                    <th>视频来源</th>
+                    <th>国籍</th>
+                    <th>描述</th>
+                    <th>状态</th>
+                    <th>创建时间</th>
+                    <th>修改时间</th>
+                    <th>操作</th>
+                    </thead>
+                    <tbody>
+                    % if videos.count() > 0:
+                    % for video in videos:
+                    <tr>
+                        <td>${video.name}</td>
+                        % if video.image != '':
+                        <td><img class="video-img" src="${video.image}"/></td>
+                        % endif
+                        % if video.image == '':
+                        <td><span class="glyphicon glyphicon-film"></span></td>
+                        % endif
+                        <td>${VideoType(video.video_type).label}</td>
+                        <td>${FromType(video.from_to).label}</td>
+                        <td>${NationalityType(video.nationality).label}</td>
+                        <td><p class="video-info">${video.info}</p></td>
+                        <td>${video.status}</td>
+                        <td>${video.createdtm}</td>
+                        <td>${video.updatedtm}</td>
+                        <td>
+                            <a class="btn btn-default videoBtn" aria-label="Left Align" href="#"
+                               data-id="${video.id}">
+                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 编辑
+                            </a>
+                            <a class="btn btn-default" aria-label="Left Align"
+                               href="${reverse('video_sub',kwargs={'video_id':video.id})}">
+                                <span class="glyphicon glyphicon-list" aria-hidden="true"></span> 附属信息
+                            </a>
+                        </td>
+                    </tr>
+                    % endfor
+                    % endif
+                    % if videos.count() == 0:
+                    <tr>
+                        <td colspan="10">
+                            暂无数据
+                        </td>
+                    </tr>
+                    % endif
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--添加/编辑自制接视频Dialog-->
+<div class="modal fade" tabindex="-1" role="dialog" id="myModal">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="videoTitle">添加视频</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal" id="videoForm" name="videoForm" method="POST">
+                    ${csrf_token}
+                    <div class="form-group required">
+                        <label for="name" class="col-sm-2 control-label">视频名称</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="name" name="name" placeholder="视频名称"
+                                   required data-bv-notempty-message="视频名称不能为空">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="image" class="col-sm-2 control-label">海报</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" id="image" name="image" placeholder="海报">
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label for="video_type" class="col-sm-2 control-label">视频类型</label>
+                        <div class="col-sm-3">
+                            <select class="form-control" id="video_type" name="video_type"
+                                    data-bv-notempty data-bv-notempty-message="视频类型不能为空">
+                                % for video_type in VideoType:
+                                <option value="${video_type.value}">${video_type.label}</option>
+                                % endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label for="from_to" class="col-sm-2 control-label">视频来源</label>
+                        <div class="col-sm-3">
+                            <select class="form-control" name="from_to" id="from_to"
+                                    data-bv-notempty data-bv-notempty-message="视频来源不能为空">
+                                % for from_to in FromType:
+                                % if from_to == FromType('custom'):
+                                <option value="${from_to.value}">${from_to.label}</option>
+                                % endif
+                                % endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label for="nationality" class="col-sm-2 control-label">国籍</label>
+                        <div class="col-sm-3">
+                            <select class="form-control" name="nationality" id="nationality"
+                                    data-bv-notempty data-bv-notempty-message="国籍不能为空">
+                                % for nationality in NationalityType:
+                                <option value="${nationality.value}">${nationality.label}</option>
+                                % endfor
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group required">
+                        <label for="info" class="col-sm-2 control-label">视频简介</label>
+                        <div class="col-sm-10">
+                            <textarea name="info" id="info" class="form-control" rows="5" placeholder="视频简介"
+                                      required data-bv-notempty-message="视频简介不能为空"></textarea>
+                        </div>
+                    </div>
+                    <input type="hidden" name="video_id" id="video_id" value="">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" name="videoSubmitBtn" id="videoSubmitBtn">提交</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+</%def>
+<%def name='js()'>
+<script type="application/javascript" src='/static/dashboard/js/video/custom_video.js'></script>
+</%def>

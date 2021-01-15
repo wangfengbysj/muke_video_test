@@ -11,6 +11,62 @@ from app.libs.base_render import render_to_response
 from app.model.video import Video, FromType, VideoSub, VideoStar
 from app.utils.permission import dashboard_auth
 
+#自制视频
+class CustomVideo(View):
+    TEMPLATE='/dashboard/video/custom_video.html'
+
+    @dashboard_auth
+    def get(self, request):
+        error = request.GET.get('error')
+        success = request.GET.get('success')
+        if error:
+            data = {'error': error}
+        elif success:
+            data = {'success': success}
+        else:
+            data = {}
+        videos = Video.objects.filter(from_to=FromType.custom.value)
+        data['videos']=videos
+        return render_to_response(request, self.TEMPLATE, data=data)
+
+    def post(self, request):
+        name = request.POST.get('name')
+        image = request.POST.get('image')
+        video_type = request.POST.get('video_type')
+        from_to = request.POST.get('from_to')
+        nationality = request.POST.get('nationality')
+        info = request.POST.get("info")
+        video_id = request.POST.get('video_id')
+        if not all([name, video_type, from_to, nationality, info]):
+            return redirect('{}?error={}'.format(reverse('external_video'), '缺少必要字段 '))
+        print(name, image, video_type, from_to, nationality, info)
+
+        if not video_id:
+            try:
+                Video.objects.create(
+                    name=name,
+                    image=image,
+                    video_type=video_type,
+                    from_to=from_to,
+                    nationality=nationality,
+                    info=info
+                )
+            except IntegrityError as e:
+                return redirect('{}?error={}'.format(reverse('custom_video'), '添加视频数据重复'))
+        else:
+            try:
+                video = Video.objects.get(pk=video_id)
+                video.name = name
+                video.image = image
+                video.video_type = video_type
+                video.from_to=from_to
+                video.nationality = nationality
+                video.info = info
+                video.save()
+            except:
+                return redirect('{}?error={}'.format(reverse('custom_video'), '更新视频数据重复'))
+
+        return redirect('{}?success={}'.format(reverse('custom_video'), '操作成功'))
 
 # 外链接页面
 class ExternalVideo(View):

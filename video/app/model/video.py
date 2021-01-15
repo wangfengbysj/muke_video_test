@@ -22,10 +22,12 @@ VideoType.other.label = '其他'
 # 视频类型
 class FromType(Enum):
     youku = 'youku'
+    bilibili='Bilibili'
     custom = 'custom'
 
 
 FromType.youku.label = '优酷'
+FromType.bilibili.label='B站'
 FromType.custom.label = '自制'
 
 # 视频国籍
