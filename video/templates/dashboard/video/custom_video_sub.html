@@ -149,7 +149,7 @@ from app.model.video import VideoType,FromType,NationalityType,IdentityType
             </div>
             <div class="modal-body">
                 <form enctype="multipart/form-data" class="form-horizontal" method="post" id="videoSubForm" name="videoSubForm"
-                      action="${reverse('video_sub', kwargs={'video_id':video.id})}">
+                      action="${reverse('custom_video_sub', kwargs={'video_id':video.id})}">
                     ${csrf_token}
                     <div class="form-group required">
                         <label for="url" class="col-sm-3 control-label">视频文件 </label>
