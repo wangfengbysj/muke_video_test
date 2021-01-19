@@ -152,7 +152,7 @@ class CustomVideoAddtion(View):
             handle_video(url,  video_id, number)
             return redirect('{}?success={}'.format(reverse('custom_video_sub', kwargs={'video_id': video_id}), '操作成功'))
 
-        
+
 # 外部视频->附加信息
 class VideoAddition(View):
     TEMPLATE = '/dashboard/video/video_sub.html'
