@@ -61,4 +61,45 @@ $(document).ready(function () {
     $('#videoAddtionOkBtn').click(function () {
         $('#videoSubForm').submit()
     })
+
+    // 演员对话框关闭后reset表单
+    $('#actorDialog').on('hide.bs.modal', function () {
+        $('#videoStarForm').bootstrapValidator('resetForm', true)
+        $('#identity').val('director')
+    })
+
+    // 弹出添加演员对话框
+    $('#videoStarBtn').click(function () {
+        $('#actorTitle').text("添加演员信息")
+        $('#actorDialog').modal('show')
+    })
+
+    // 演员表单验证
+    $('#videoStarForm').bootstrapValidator({
+        fields: {
+            actorName: {
+                validators: {
+                    notEmpty: {
+                        message: '演员不能为空'
+                    }
+                }
+            },
+            identity: {
+                validators: {
+                    notEmpty: {
+                        message: '角色不能为空'
+                    }
+                }
+            }
+        }
+    }).on('success.form.bv', function (e) {
+        console.log('success.form.bv');
+        e.preventDefault();
+        e.target.submit()
+    })
+
+    // 提交演员表单
+    $('#actorOkBtn').click(function () {
+        $('#videoStarForm').submit()
+    })
 })

@@ -1,5 +1,6 @@
 # encoding:utf-8
 import json
+import os
 
 from django.core import serializers
 from django.db import IntegrityError
@@ -13,6 +14,9 @@ from app.utils.commons import handle_video
 from app.utils.permission import dashboard_auth
 
 #自制视频
+from config import settings
+
+
 class CustomVideo(View):
     TEMPLATE='/dashboard/video/custom_video.html'
 
@@ -146,23 +150,9 @@ class CustomVideoAddtion(View):
         if FromType(video.from_to) == FromType.custom:
             url = request.FILES.get('url')
             handle_video(url,  video_id, number)
-            return redirect(reverse('custom_video_sub', kwargs={'video_id': video_id}))
+            return redirect('{}?success={}'.format(reverse('custom_video_sub', kwargs={'video_id': video_id}), '操作成功'))
 
-        if url == '' or number == '':
-            return redirect(reverse('custom_video_sub', kwargs={'video_id': video_id}))
-
-        if not video_sub_id:
-            video = Video.objects.get(pk=video_id)
-            VideoSub.objects.create(video=video, url=url, number=number)
-            return redirect('{}?success={}'.format(reverse('custom_video_sub', kwargs={'video_id': video_id}), '添加剧集成功'))
-        else:
-            video_sub = VideoSub.objects.get(pk=video_sub_id)
-            video_sub.url = url
-            video_sub.number = number
-            video_sub.save()
-            return redirect('{}?success={}'.format(reverse('custom_video_sub', kwargs={'video_id': video_id}), '编辑剧集成功'))
-
-
+        
 # 外部视频->附加信息
 class VideoAddition(View):
     TEMPLATE = '/dashboard/video/video_sub.html'
@@ -231,7 +221,52 @@ class VideoSubDelete(View):
         VideoSub.objects.get(pk=videosub_id).delete()
         return redirect('{}?success={}'.format(reverse('video_sub', kwargs={'video_id': video_id}), '删除附加信息成功'))
 
+# 自治视频->删除附加信息
+class CustVideoSubDelete(View):
+    def get(self, request,video_id, cust_videosub_id):
+        video_sub = VideoSub.objects.get(pk=cust_videosub_id)
+        filename = video_sub.url.removeprefix(settings.VIDEO_HTTP+'/')
+        path ='/'.join([settings.NGINX_DIR, 'django_video', filename])
+        if os.path.exists(path):
+            os.remove(path)
+        else:
+            print('目录不存在',path)
+        video_sub.delete()
+        return redirect('{}?success={}'.format(reverse('custom_video_sub', kwargs={'video_id': video_id}), '删除附加信息成功'))
 
+# 自治视频->添加角色
+class CustVideoStarView(View):
+
+    def post(self, request, video_id):
+        name = request.POST.get('actorName')
+        identity = request.POST.get('identity')
+        print(name, identity, video_id)
+        if not all([name, identity]):
+            return redirect('{}?error={}'.format(reverse('custom_video_sub', kwargs={'video_id': video_id}), '缺少必要字段 '))
+
+        video = Video.objects.get(pk=video_id)
+        try:
+            VideoStar.objects.create(
+                name=name,
+                identity=identity,
+                video=video
+            )
+        except:
+            return redirect('{}?error={}'.format(reverse('custom_video_sub', kwargs={'video_id': video_id}), '演员添加失败'))
+
+        return redirect('{}?success={}'.format(reverse('custom_video_sub', kwargs={'video_id': video_id}), '演员添加成功'))
+
+
+# 自治视频->角色删除
+class CustVideoStarDelete(View):
+
+    def get(self, request, star_id, video_id):
+        star = VideoStar.objects.get(pk=star_id)
+        if star:
+            star.delete()
+        return redirect('{}?success={}'.format(reverse('custom_video_sub', kwargs={'video_id': video_id}), '演员删除成功'))
+
+# 外部链接->对话框显示更新视频信息
 class VideoUpdate(View):
     def get(self, request, video_id):
         print('video_id=', video_id)

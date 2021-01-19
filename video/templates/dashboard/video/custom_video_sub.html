@@ -46,12 +46,8 @@ from app.model.video import VideoType,FromType,NationalityType,IdentityType
                             <a class="btn btn-primary" aria-label="Left Align" href="${video_sub.url}">
                                 <span class="glyphicon glyphicon-list" aria-hidden="true"></span> 查看
                             </a>
-                            <a class="btn btn-warning videosubEditBtn" aria-label="Left Align" href="#"
-                               data-url="${video_sub.url}" data-number="${video_sub.number}" data-id="${video_sub.id}">
-                                <span class="glyphicon glyphicon-edit" aria-hidden="true"></span> 编辑
-                            </a>
                             <a class="btn btn-danger videosubDeleteBtn" aria-label="Left Align"
-                               href="${reverse('video_sub_del',kwargs={'video_id':video.id, 'videosub_id':video_sub.id})}">
+                               href="${reverse('cust_video_sub_del',kwargs={'video_id':video.id, 'cust_videosub_id':video_sub.id})}">
                                 <span class="glyphicon glyphicon-trash" aria-hidden="true"></span> 删除
                             </a>
                         </td>
@@ -85,7 +81,7 @@ from app.model.video import VideoType,FromType,NationalityType,IdentityType
                         <span class="label label-${IdentityType(video_star.identity).color}">${IdentityType(video_star.identity).label}</span>
                         ${video_star.name}
                         <a class="btn btn-danger btn-xs pull-right" aria-label="Left Align"
-                           href="${reverse('video_star_delete',kwargs={'video_id':video.id, 'star_id':video_star.id})}">
+                           href="${reverse('cust_video_star_delete',kwargs={'video_id':video.id, 'star_id':video_star.id})}">
                             <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
                         </a>
                     </li>
@@ -108,7 +104,7 @@ from app.model.video import VideoType,FromType,NationalityType,IdentityType
             </div>
             <div class="modal-body">
                 <form class="form-horizontal" method="post" id="videoStarForm" name="videoStarForm"
-                      action="${reverse('video_star', kwargs={'video_id':video.id})}">
+                      action="${reverse('cust_video_star', kwargs={'video_id':video.id})}">
                     ${csrf_token}
                     <div class="form-group required">
                         <label for="actorName" class="col-sm-3 control-label">演员 </label>
