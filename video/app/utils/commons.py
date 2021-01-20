@@ -4,6 +4,8 @@ import os
 import shutil
 import time
 
+from django.db import IntegrityError
+
 from app.model.video import Video, VideoSub
 from config import settings
 
@@ -29,13 +31,11 @@ def handle_video(video_file, video_id, number):
     shutil.copyfile(temp_file, path_name)
 
     # 拷贝path_out目录
-    if file_ext == 'mp4':
+    if video_file.name.endswith('mp4'):
         out_path = '/'.join([out_path, in_path_filename+".mp4"])
-        print('is map4 path',out_path)
         shutil.copyfile(path_name,out_path)
     else:
         out_path = '/'.join([out_path,in_path_filename+'.mp4'])
-        print('not map4 path', out_path)
         command = 'ffmpeg -i {} {}'.format(path_name, out_path)
         os.system(command)
 
@@ -45,7 +45,6 @@ def handle_video(video_file, video_id, number):
 
     if os.path.exists(path_name):
         video = Video.objects.get(pk=video_id)
-        print('save nginx path','/'.join([settings.VIDEO_HTTP, in_path_filename+'.mp4']))
         try:
             VideoSub.objects.create(
                 video=video,
@@ -53,8 +52,8 @@ def handle_video(video_file, video_id, number):
                 number=number
             )
             return True
-        except:
-            print('添加集数重复===============')
+        except IntegrityError as e:
+            remove_path(['/'.join([settings.NGINX_DIR, 'django_video',in_path_filename+'.mp4'])])
             return False
         finally:
             remove_path(['/'.join([in_path, in_path_filename + '.' + file_ext]),out_path])

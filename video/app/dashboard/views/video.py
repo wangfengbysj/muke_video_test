@@ -149,8 +149,11 @@ class CustomVideoAddtion(View):
 
         if FromType(video.from_to) == FromType.custom:
             url = request.FILES.get('url')
-            handle_video(url,  video_id, number)
-            return redirect('{}?success={}'.format(reverse('custom_video_sub', kwargs={'video_id': video_id}), '操作成功'))
+            if handle_video(url,  video_id, number):
+                return redirect('{}?success={}'.format(reverse('custom_video_sub', kwargs={'video_id': video_id}), '操作成功'))
+            else:
+                return redirect(
+                    '{}?error={}'.format(reverse('custom_video_sub', kwargs={'video_id': video_id}), '视频集数重复'))
 
 
 # 外部视频->附加信息
