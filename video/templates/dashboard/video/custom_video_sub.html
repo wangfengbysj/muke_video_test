@@ -41,7 +41,7 @@ from app.model.video import VideoType,FromType,NationalityType,IdentityType
                     % for video_sub in video.video_sub.all():
                     <tr>
                         <td class="text-nowrap">第${video_sub.number}集</td>
-                        <td><p>${video_sub.url}</p></td>
+                        <td><p>${video_sub.url or '处理中，请稍后'}</p></td>
                         <td class="video-btn">
                             <a class="btn btn-primary" aria-label="Left Align" href="${video_sub.url}">
                                 <span class="glyphicon glyphicon-list" aria-hidden="true"></span> 查看

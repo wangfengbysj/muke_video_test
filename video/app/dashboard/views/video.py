@@ -228,12 +228,13 @@ class VideoSubDelete(View):
 class CustVideoSubDelete(View):
     def get(self, request,video_id, cust_videosub_id):
         video_sub = VideoSub.objects.get(pk=cust_videosub_id)
-        filename = video_sub.url.removeprefix(settings.VIDEO_HTTP+'/')
-        path ='/'.join([settings.NGINX_DIR, 'django_video', filename])
-        if os.path.exists(path):
-            os.remove(path)
-        else:
-            print('目录不存在',path)
+        if video_sub.url != '':
+            filename = video_sub.url.removeprefix(settings.VIDEO_HTTP+'/')
+            path ='/'.join([settings.NGINX_DIR, 'django_video', filename])
+            if os.path.exists(path):
+                os.remove(path)
+            else:
+                print('目录不存在',path)
         video_sub.delete()
         return redirect('{}?success={}'.format(reverse('custom_video_sub', kwargs={'video_id': video_id}), '删除附加信息成功'))
 

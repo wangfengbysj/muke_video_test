@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+import djcelery
+djcelery.setup_loader()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -41,8 +43,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'app'
+    'app',
+    'djcelery'
 ]
+BROKER_URL='redis://localhost:6379/2'
+CELERY_RESULT_BACKEND='redis://localhost:6379/3'
+CELERY_IMPORTS=('app.tasks.task')
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

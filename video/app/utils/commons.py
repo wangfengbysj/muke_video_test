@@ -1,12 +1,11 @@
-# encoding:utf-8
+# coding:utf-8
 
 import os
 import shutil
 import time
 
-from django.db import IntegrityError
-
 from app.model.video import Video, VideoSub
+from app.tasks.task import video_task
 from config import settings
 
 
@@ -27,34 +26,13 @@ def handle_video(video_file, video_id, number):
 
     # 上传path_in目录
     in_path_filename = '{}_{}'.format(time.time(), filename)
-    path_name = '/'.join([in_path, in_path_filename+"."+file_ext])
+    path_name = '/'.join([in_path, in_path_filename + "." + file_ext])
     shutil.copyfile(temp_file, path_name)
 
-    # 拷贝path_out目录
-    if video_file.name.endswith('mp4'):
-        out_path = '/'.join([out_path, in_path_filename+".mp4"])
-        shutil.copyfile(path_name,out_path)
-    else:
-        out_path = '/'.join([out_path,in_path_filename+'.mp4'])
-        command = 'ffmpeg -i {} {}'.format(path_name, out_path)
-        os.system(command)
-
-    nginx_base_path = '/'.join([settings.NGINX_DIR, 'django_video'])
-    path_name = '/'.join([nginx_base_path, in_path_filename+'.mp4'])
-    shutil.copyfile(out_path, path_name)
-
-    if os.path.exists(path_name):
-        video = Video.objects.get(pk=video_id)
-        try:
-            VideoSub.objects.create(
-                video=video,
-                url='/'.join([settings.VIDEO_HTTP, in_path_filename+'.mp4']),
-                number=number
-            )
-            return True
-        except IntegrityError as e:
-            remove_path(['/'.join([settings.NGINX_DIR, 'django_video',in_path_filename+'.mp4'])])
-            return False
-        finally:
-            remove_path(['/'.join([in_path, in_path_filename + '.' + file_ext]),out_path])
-    return False
+    video = Video.objects.get(pk=video_id)
+    videosub = VideoSub.objects.create(
+        video=video,
+        url='',
+        number=number
+    )
+    return video_task.delay(in_path, file_ext, out_path, in_path_filename, path_name, videosub.id)
