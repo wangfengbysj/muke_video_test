@@ -47,7 +47,7 @@
 ### gunicore服务配置
 - 配置服务【conf.py】
 
-```
+```python
 # coding=utf-8
 import multiprocessing
 bind = '127.0.0.1:8000'
@@ -63,7 +63,7 @@ worker_class = 'gevent'
 ## 环境设置
 
 ### 启动设置是UTF8环境
-```
+```python
 PYTHONIOENCODING=utf-8 python manage.py runserver
 PYTHONIOENCODING=utf-8 python manage.py shell
 PYTHONIOENCODING=utf-8 ipython
@@ -77,7 +77,7 @@ PYTHONIOENCODING=utf-8 ipython
 ### 配置目录
 - templates目录在settings.py文件中设置DIRS
 
-```
+```python
 'DIRS': [os.path.join(BASE_DIR,'templates')]
 View.py中返回值
 return render(request, 模版文件路径和名字, {key:value})
@@ -128,7 +128,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 
 - environment加载程序
 
-	```
+	```python
 	from jinja2 import Environment
 	from django.contrib.staticfiles.storage import staticfiles_storage
 	from django.urls import reverse
@@ -148,7 +148,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 	  
 - 自定义filter
 
-	```
+	```python
 	def test(value, args):
    	 	print('value is {0}, args is {1}'.format(value, args))
    	 	return int(value) * int(args)
@@ -161,7 +161,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 
 - mako 页面标签
 		
-	```
+	```python
 	${页面数据}
 	
 	<%!
@@ -176,7 +176,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 
 - mako render的内容
 
-	```
+	```python
 	from mako.lookup import TemplateLookup
 	from django.template import RequestContext
 	from django.conf import settings
@@ -209,7 +209,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 	
 - views使用mako render处理response内容
 
-	```
+	```python
     def get(self,request):
         data = {'name':'dewei', 'age':30}
         return render_to_response(request,self.TEMPLATE, data=data)
@@ -246,7 +246,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
   
   - admin页面加载ORM对象，需在app模块目录的的admin.py中添加数据对象配置
   
-  	```
+  	```python
   	# encoding:utf-8
 	from django.contrib import admin
 	from django.utils.html import format_html
@@ -294,7 +294,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 
 	-  文件保存**sqlalchemy_test.py**
 	
-	```
+	```python
 	Base = declarative_base()  ->实例化base模块
 	engine = create_engine(‘mysql+pymysql://root:@localhost:3306/sqlalchemy_test’)  -> 链接数据库引擎
 	Base.metadata.create_all(engine)
@@ -309,7 +309,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 	- python sqlalchemy_test.py
 - 插入数据，使用ipython 并导入 **sqlalchemy_test.py**
 
-	```
+	```python
 	ipython
 	Python 3.9.0 (v3.9.0:9cf6752276, Oct  5 2020, 11:29:23) 
 	Type 'copyright', 'credits' or 'license' for more information
@@ -329,7 +329,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 	```
 - 查询数据
 
-	```
+	```python
 	In [14]: dewei = db_session.query(User).filter_by(name='dewei').one()
 
 	In [15]: dewei.name
@@ -347,7 +347,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 	
 	- django中settings.py添加配置redis
 	
-		```
+		```python
 		CACHES = {
 		    "default": {
 		        "BACKEND": "django_redis.cache.RedisCache",
@@ -363,13 +363,13 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 - redis的使用
 	- 不依赖django使用redis配置方法
 
-		```
+		```python
 		import redis 
 		conn = redis.Redis(host='127.0.0.1', port='6379')
 		```
 	- django中rediscover使用
 
- 		```
+ 		```python
 		import json
 		from django_redis import get_redis_connection
 		_cache = get_redis_connection('default')
@@ -381,13 +381,13 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 
 - mongo安装
 
-	```
+	```python
 	pip intall pymongo
 	```
 	
 	- 如果使用表关联需要安装如下
 
-		```
+		```python
 		pip install mongoengine
 		```
 - 在Django中settings文件中添加配置
@@ -398,7 +398,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 	```
 - 代码中使用方法
 
-	```
+	```python
 	from django.conf import settings
 	conn = settings.MONGOCLIENT['test_mongo']
 	db = conn['user']
@@ -422,7 +422,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 	
 - 创建密码
 	
-	```
+	```python
 	from django.contrib.auth.hashers import make_password
 	hash_password = make_password('password')
 	```
@@ -433,7 +433,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 ## 权限访问
 - 用户添加、删除权限
 
-	```
+	```python
 	In [1]: from django.contrib.auth.models import User,Permission
 
 	In [2]: a_permission = Permission.objects.get(codename='look_a_page')
@@ -448,14 +448,14 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 	```
 - 判断权限
 
-	```
+	```python
     if not request.user.has_perm('app.look_a_page'):
         raise Http404()
 	```
 - template中判断权限
 	> perms.应用名.权限名
 	
-	```
+	```python
 	{% if not perms.app.look_a_page %}
 		您没有权限访问
 	{% else %}
@@ -466,7 +466,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 ## 权限组
 - 权限组创建，绑定用户
 
-	```
+	```python
 	In [2]: from django.contrib.auth.models import User,Permission,Group
 
 	In [3]: Group.objects.create(name='b')
@@ -486,7 +486,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 	```
 - 权限组删除
 
-	```
+	```python
 	user.groups.remove(group)
 	```
 
@@ -494,7 +494,7 @@ STATICFILES_DIRS=(os.path.join(BASE_DIR, 'static'), )
 
 - 在requirements.txt中添加如下4个库
 
-```
+```python
 celery
 django-celery
 celery-with-redis
@@ -502,7 +502,7 @@ redis==2.10.6
 ```
 - 在settings中进入如下配置
 
-```
+```python
 import djcelery
 djcelery.setup_loader()
 INSTALLED_APPS = [
@@ -515,7 +515,7 @@ CELERY_IMPORTS=('app.tasks.task')
 
 - celery方法定义
 
-```
+```python
 #coding:utf-8
 import time
 from celery import task
@@ -529,14 +529,14 @@ def say_hello():
 
 - celery异步函数在视图中使用
 
-```
+```python
 from app.tasks.task import say_hello
 say_hello.delay(参数列表)
 ```
 - celery与python服务启动方法
 	- 首次配置完成后执行sql同步方法
 
-	```
+	```python
 	python manage.py makemigrations
 	python manage.py migrate
 	```
