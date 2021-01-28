@@ -10,6 +10,7 @@ click-plugins==1.1.1
 click-repl==0.1.6
 Django==3.1.5
 django-celery==3.3.1
+gunicorn==20.0.4
 importlib-metadata==3.4.0
 kombu==3.0.37
 Mako==1.1.4

@@ -229,7 +229,7 @@ class CustVideoSubDelete(View):
     def get(self, request,video_id, cust_videosub_id):
         video_sub = VideoSub.objects.get(pk=cust_videosub_id)
         if video_sub.url != '':
-            filename = video_sub.url.removeprefix(settings.VIDEO_HTTP+'/')
+            filename = video_sub.url.replace(settings.VIDEO_HTTP+'/','')
             path ='/'.join([settings.NGINX_DIR, 'django_video', filename])
             if os.path.exists(path):
                 os.remove(path)
